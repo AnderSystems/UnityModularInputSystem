@@ -4,10 +4,12 @@ A custom input system that uses both the new and old Unity input systems.
 
 ## Table of Contents
 
+- Features
 - Installation
 - Usage
-- Contributing
-- License
+
+## Features
+This new input system is easy to use and configure, similar to old input system functionality, this is very adaptable and you can customize it
 
 ## Installation
 
