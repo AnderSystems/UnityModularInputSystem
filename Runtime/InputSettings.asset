@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f15879f6cf706478610c1c7ca2218c, type: 3}
+  m_Name: InputSettings
+  m_EditorClassIdentifier: 
+  m_Inputs:
+    Buttons:
+    - Name: Run
+      keys:
+      - keyCode: 304
+    Axis:
+    - Name: Move
+      type: 2
+      Keys_Up:
+      - keyCode: 273
+      - keyCode: 119
+      Keys_Down:
+      - keyCode: 274
+      - keyCode: 115
+      Keys_Left:
+      - keyCode: 276
+      - keyCode: 97
+      Keys_Right:
+      - keyCode: 275
+      - keyCode: 100

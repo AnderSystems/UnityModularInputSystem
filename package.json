@@ -1,0 +1,20 @@
+{
+  "name": "com.andersystems.custominputsystem",
+  "version": "1.0.0",
+  "displayName": "Custom Input System",
+  "description": "A custom input system that uses both the new and old Unity input systems.",
+  "unity": "2020.3",
+  "dependencies": {
+    "com.unity.inputsystem": "1.5.1",
+    "com.unity.ugui": "1.0.0"
+  },
+  "keywords": [
+    "input",
+    "custom",
+    "unity"
+  ],
+  "author": {
+    "name": "Marco Matoso",
+    "email": "socialander@gmail.com"
+  }
+}
