@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -263,7 +265,7 @@ public class InputSystem : MonoBehaviour
         button r = null;
         for (int i = 0; i < main.settings.m_Inputs.Buttons.Length; i++)
         {
-            if (main.settings.m_Inputs.Buttons[i].m_name == name)
+            if (main.settings.m_Inputs.Buttons[i].m_name.ToLower() == name.ToLower())
             {
                 r = main.settings.m_Inputs.Buttons[i];
                 break;
@@ -299,6 +301,10 @@ public class InputSystem : MonoBehaviour
     }
     public static bool GetButtonDown(string name)
     {
+        if (string.IsNullOrEmpty(name))
+        {
+            return false;
+        }
         return SearchButton(name).isDown;
     }
     public static bool GetButtonUp(string name)
@@ -309,10 +315,90 @@ public class InputSystem : MonoBehaviour
     {
         return SearchAxis(name).value;
     }
+    public static string GetButtonName(string name)
+    {
+        string r = "<h1>[" + GetButtonNameRaw(name) + "]</h1>";
+
+        if (r == "<h1>[Mouse0]</h1>")
+        {
+            r = "<h1>[LMB]</h1>";
+        }
+
+        if (r == "<h1>[Mouse1]</h1>")
+        {
+            r = "<h1>[RMB]</h1>";
+        }
+
+        if (r == "<h1>[Mouse2]</h1>")
+        {
+            r = "<h1>[Scroll Button]</h1>";
+        }
+
+        return r;
+    }
+    public static string GetButtonNameRaw(string name)
+    {
+        return SearchButton(name).keys[0].keyCode.ToString();
+    }
+
+
+    public void SetButtonNames()
+    {
+        //Set Button Names
+        for (int i = 0; i < settings.m_Inputs.Buttons.Length; i++)
+        {
+            if (string.IsNullOrEmpty(settings.m_Inputs.Buttons[i].Name))
+            {
+                settings.m_Inputs.Buttons[i].m_name = settings.m_Inputs.Buttons[i].keys[0].keyCode.ToString();
+            }
+            else
+            {
+                settings.m_Inputs.Buttons[i].m_name = settings.m_Inputs.Buttons[i].Name;
+            }
+        }
+    }
+    public void SetAxisNames()
+    {
+        //Set Axis Names
+        for (int i = 0; i < settings.m_Inputs.Axis.Length; i++)
+        {
+            if (string.IsNullOrEmpty(settings.m_Inputs.Axis[i].Name))
+            {
+                settings.m_Inputs.Axis[i].m_name = settings.m_Inputs.Axis[i].type.ToString();
+            }
+            else
+            {
+                settings.m_Inputs.Axis[i].m_name = settings.m_Inputs.Axis[i].Name;
+            }
+        }
+    }
 
     //Mono
+    public void Awake()
+    {
+        Debug.Log("InputSettings: " + settings.name);
+        DontDestroyOnLoad(gameObject);
+    }
+    private void Start()
+    {
+        SetButtonNames();
+        SetAxisNames();
+    }
     private void Update()
     {
+        DebugVar.Log("Current InputSystem", settings.name, this);
+        DebugVar.Log("Current InputSystem Axis", settings.m_Inputs.Axis.Length, this);
+
+        string axisBtns = "";
+        for (int i = 0; i < settings.m_Inputs.Axis.Length; i++)
+        {
+            axisBtns += settings.m_Inputs.Axis[i].m_name + "\n";
+        }
+        DebugVar.Log("Current InputSystem Axis", settings.m_Inputs.Axis.Length + "\n" + axisBtns, this);
+
+        DebugVar.Log("Current InputSystem Btns", settings.m_Inputs.Buttons.Length, this);
+
+
         //Update Buttons
         for (int i = 0; i < settings.m_Inputs.Buttons.Length; i++)
         {
@@ -326,6 +412,7 @@ public class InputSystem : MonoBehaviour
         }
     }
 
+
     public void OnValidate()
     {
         if (!settings)
@@ -338,32 +425,8 @@ public class InputSystem : MonoBehaviour
             {
                 inputs = settings.m_Inputs;
             }
-
-            //Set Button Names
-            for (int i = 0; i < settings.m_Inputs.Buttons.Length; i++)
-            {
-                if (string.IsNullOrEmpty(settings.m_Inputs.Buttons[i].Name))
-                {
-                    settings.m_Inputs.Buttons[i].m_name = settings.m_Inputs.Buttons[i].keys[0].keyCode.ToString();
-                }
-                else
-                {
-                    settings.m_Inputs.Buttons[i].m_name = settings.m_Inputs.Buttons[i].Name;
-                }
-            }
-
-            //Set Axis Names
-            for (int i = 0; i < settings.m_Inputs.Axis.Length; i++)
-            {
-                if (string.IsNullOrEmpty(settings.m_Inputs.Axis[i].Name))
-                {
-                    settings.m_Inputs.Axis[i].m_name = settings.m_Inputs.Axis[i].type.ToString();
-                }
-                else
-                {
-                    settings.m_Inputs.Axis[i].m_name = settings.m_Inputs.Axis[i].Name;
-                }
-            }
+            SetButtonNames();
+            SetAxisNames();
         }
     }
 }
