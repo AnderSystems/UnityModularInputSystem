@@ -15,9 +15,9 @@ This new input system is easy to use and configure, similar to old input system 
 
 To install this package, follow these steps:
 
-1. Open Unity and go to **Window > Package Manager**.
-2. Click the **+** button and select **Add package from git url** and paste ```https://github.com/AnderSystems/UnityModularInputSystem.git```.
-3. Configure the inputs on **Project Settings > Input System**
+1. Donload the latest version
+2. In Project Window, `Right Click > Import Package > Custom Package` and Select the Input Package
+3. Configure your inputs in ``ProjectSettings > Input System``
 
 ## Usage
 
