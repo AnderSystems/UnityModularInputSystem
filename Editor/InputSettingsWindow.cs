@@ -15,7 +15,7 @@ public class InputSettingsWindow : EditorWindow
     {
         GUILayout.Label("Input Settings", EditorStyles.boldLabel);
 
-        inputSettings = InputSystemProjectSettings.selectedInputSettings;
+        inputSettings = GameInputProjectSettings.selectedInputSettings;
         inputSettings = (InputSettings)EditorGUILayout.ObjectField("Input Settings", inputSettings, typeof(InputSettings), false);
 
         if (inputSettings != null)
@@ -27,8 +27,8 @@ public class InputSettingsWindow : EditorWindow
             serializedObject.ApplyModifiedProperties();
         }
 
-        InputSystem.main.settings = inputSettings;
+        GameInput.main.settings = inputSettings;
 
-        InputSystemProjectSettings.selectedInputSettings = inputSettings;
+        GameInputProjectSettings.selectedInputSettings = inputSettings;
     }
 }

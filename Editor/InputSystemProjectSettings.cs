@@ -1,21 +1,20 @@
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-static class InputSystemProjectSettings
+static class GameInputProjectSettings
 {
     public static InputSettings selectedInputSettings;
 
     [SettingsProvider]
-    public static SettingsProvider CreateInputSystemSettingsProvider()
+    public static SettingsProvider CreateGameInputSettingsProvider()
     {
-        var provider = new SettingsProvider("Project/InputSystem", SettingsScope.Project)
+        var provider = new SettingsProvider("Project/GameInput", SettingsScope.Project)
         {
             label = "Input System",
             guiHandler = (searchContext) =>
             {
                 selectedInputSettings = (InputSettings)EditorGUILayout.ObjectField("Input Settings", selectedInputSettings, typeof(InputSettings), false);
-                InputSystem.selectedSettings = selectedInputSettings;
+                GameInput.selectedSettings = selectedInputSettings;
 
                 if (selectedInputSettings == null)
                 {
@@ -48,10 +47,10 @@ static class InputSystemProjectSettings
 
     public static void LoadSettings()
     {
-        string path = EditorPrefs.GetString("InputSystemSettingsPath", "Assets/InputSettings.asset");
+        string path = EditorPrefs.GetString("GameInputSettingsPath", "Assets/InputSettings.asset");
         selectedInputSettings = AssetDatabase.LoadAssetAtPath<InputSettings>(path);
-        InputSystem.main.settings = selectedInputSettings;
-        InputSystem.selectedSettings = selectedInputSettings;
+        GameInput.main.settings = selectedInputSettings;
+        GameInput.selectedSettings = selectedInputSettings;
     }
 
     public static void SaveSettings()
@@ -59,9 +58,9 @@ static class InputSystemProjectSettings
         if (selectedInputSettings != null)
         {
             string path = AssetDatabase.GetAssetPath(selectedInputSettings);
-            EditorPrefs.SetString("InputSystemSettingsPath", path);
-            InputSystem.main.settings = selectedInputSettings;
-            InputSystem.selectedSettings = selectedInputSettings;
+            EditorPrefs.SetString("GameInputSettingsPath", path);
+            GameInput.main.settings = selectedInputSettings;
+            GameInput.selectedSettings = selectedInputSettings;
         }
     }
 }

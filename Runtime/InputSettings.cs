@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "InputSettings", menuName = "InputSystem/InputSettings")]
+[CreateAssetMenu(fileName = "InputSettings", menuName = "GameInput/InputSettings")]
 public class InputSettings : ScriptableObject
 {
     /// <summary>
@@ -14,12 +14,12 @@ public class InputSettings : ScriptableObject
         /// An array of input button
         /// </summary>
         [SerializeField]
-        public InputSystem.button[] Buttons;
+        public GameInput.button[] Buttons;
         /// <summary>
         /// An array of input axis
         /// </summary>
         [SerializeField]
-        public InputSystem.axis[] Axis;
+        public GameInput.axis[] Axis;
     }
     [Tooltip("The input layout list")]
     [SerializeField]
