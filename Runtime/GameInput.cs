@@ -6,21 +6,19 @@ using UnityEngine.InputSystem;
 using UnityEditor;
 
 [CustomEditor(typeof(GameInput))]
-public class CustomGameInputEditor : Editor
+public class InputSystemEditor : Editor
 {
     [MenuItem("GameObject/New Input System")]
-    public static void CreateNewGameInputObject()
+    public static void CreateNewInputSystemObject()
     {
-        GameInput inp = GameInput.CreateNewGameInputObject();
+        GameInput inp = GameInput.CreateNewInputSystemObject();
     }
 }
 #endif
 
-//namespace AnderSystems
-//{
 public class GameInput : MonoBehaviour
 {
-    public static InputSettings selectedSettings;
+    public static GameInputSettings selectedSettings;
 
     //Set Singleton
     static GameInput instance;
@@ -35,7 +33,7 @@ public class GameInput : MonoBehaviour
 
             if (instance == null)
             {
-                instance = CreateNewGameInputObject();
+                instance = CreateNewInputSystemObject();
 #if UNITY_EDITOR
                 instance.settings = selectedSettings;
 #endif
@@ -134,22 +132,22 @@ public class GameInput : MonoBehaviour
         public Vector2 delta { get; set; }
     }
 
-    public static GameInput CreateNewGameInputObject()
+    public static GameInput CreateNewInputSystemObject()
     {
-        GameInput GameInput = new GameObject("GameInput").AddComponent<GameInput>();
-        return GameInput;
+        GameInput inputSystem = new GameObject("InputSystem").AddComponent<GameInput>();
+        return inputSystem;
     }
 
 
     /// <summary>
     /// The current input settings
     /// </summary>
-    public InputSettings settings;
+    public GameInputSettings settings;
     /// <summary>
     /// The current input list
     /// </summary>
     [SerializeField]
-    public InputSettings.Inputs inputs;
+    public GameInputSettings.Inputs inputs;
 
     public void ControllAxis(axis axis)
     {
@@ -260,13 +258,14 @@ public class GameInput : MonoBehaviour
         }
     }
 
+
     //Acess
     public static button SearchButton(string name)
     {
         button r = null;
         for (int i = 0; i < main.settings.m_Inputs.Buttons.Length; i++)
         {
-            if (main.settings.m_Inputs.Buttons[i].m_name == name)
+            if (main.settings.m_Inputs.Buttons[i].m_name.ToLower() == name.ToLower())
             {
                 r = main.settings.m_Inputs.Buttons[i];
                 break;
@@ -274,7 +273,7 @@ public class GameInput : MonoBehaviour
         }
         if (r == null)
         {
-            Debug.LogError("[GameInput] Button not found: " + name);
+            Debug.LogError("[InputSystem] Button not found: " + name);
         }
         return r;
     }
@@ -291,7 +290,7 @@ public class GameInput : MonoBehaviour
         }
         if (r == null)
         {
-            Debug.LogError("[GameInput] Axis not found: " + name);
+            Debug.LogError("[InputSystem] Axis not found: " + name);
         }
         return r;
     }
@@ -302,20 +301,133 @@ public class GameInput : MonoBehaviour
     }
     public static bool GetButtonDown(string name)
     {
-        return SearchButton(name).isDown;
+        button btn = SearchButton(name);
+
+        if (string.IsNullOrEmpty(name) || btn == null)
+        {
+            return false;
+        }
+        return btn.isDown;
     }
     public static bool GetButtonUp(string name)
     {
-        return SearchButton(name).isUp;
+        button btn = SearchButton(name);
+
+        if (string.IsNullOrEmpty(name) || btn == null)
+        {
+            return false;
+        }
+        return btn.isUp;
     }
     public static Vector2 GetAxis(string name)
     {
+        axis axis = SearchAxis(name);
+
+        if (string.IsNullOrEmpty(name) || axis == null)
+        {
+            return Vector2.zero;
+        }
         return SearchAxis(name).value;
+    }
+    public static Vector2 GetAxisRaw(string name)
+    {
+        axis axis = SearchAxis(name);
+
+        if (string.IsNullOrEmpty(name) || axis == null)
+        {
+            return Vector2.zero;
+        }
+        return SearchAxis(name).delta;
+    }
+    public static string GetButtonName(string name)
+    {
+        string r = GetButtonNameRaw(name);
+
+        if (r == "Mouse0")
+        {
+            r = "LMB";
+        }
+
+        if (r == "Mouse1")
+        {
+            r = "RMB";
+        }
+
+        if (r == "Mouse2")
+        {
+            r = "Scroll Button";
+        }
+
+        if (r.Contains("Alpha"))
+        {
+            r = r.Replace("Alpha", "");
+        }
+
+        return r;
+    }
+    public static string GetButtonNameRaw(string name)
+    {
+        return SearchButton(name).keys[0].keyCode.ToString();
+    }
+
+
+    public void SetButtonNames()
+    {
+        //Set Button Names
+        for (int i = 0; i < settings.m_Inputs.Buttons.Length; i++)
+        {
+            if (string.IsNullOrEmpty(settings.m_Inputs.Buttons[i].Name))
+            {
+                settings.m_Inputs.Buttons[i].m_name = settings.m_Inputs.Buttons[i].keys[0].keyCode.ToString();
+            }
+            else
+            {
+                settings.m_Inputs.Buttons[i].m_name = settings.m_Inputs.Buttons[i].Name;
+            }
+        }
+    }
+    public void SetAxisNames()
+    {
+        //Set Axis Names
+        for (int i = 0; i < settings.m_Inputs.Axis.Length; i++)
+        {
+            if (string.IsNullOrEmpty(settings.m_Inputs.Axis[i].Name))
+            {
+                settings.m_Inputs.Axis[i].m_name = settings.m_Inputs.Axis[i].type.ToString();
+            }
+            else
+            {
+                settings.m_Inputs.Axis[i].m_name = settings.m_Inputs.Axis[i].Name;
+            }
+        }
     }
 
     //Mono
+    public void Awake()
+    {
+        Debug.Log("InputSettings: " + settings.name);
+        DontDestroyOnLoad(gameObject);
+    }
+    private void Start()
+    {
+        SetButtonNames();
+        SetAxisNames();
+    }
     private void Update()
     {
+        //DebugVar.Log("Current InputSystem", settings.name, this);
+        //DebugVar.Log("Current InputSystem Axis", settings.m_Inputs.Axis.Length, this);
+
+        string axisBtns = "";
+        for (int i = 0; i < settings.m_Inputs.Axis.Length; i++)
+        {
+            axisBtns += settings.m_Inputs.Axis[i].m_name + "\n";
+        }
+        //DebugVar.Log("Current InputSystem Axis", settings.m_Inputs.Axis.Length + "\n" + axisBtns, this);
+
+        //DebugVar.Log("Current InputSystem Btns", settings.m_Inputs.Buttons.Length, this);
+
+
         //Update Buttons
         for (int i = 0; i < settings.m_Inputs.Buttons.Length; i++)
         {
@@ -329,6 +441,7 @@ public class GameInput : MonoBehaviour
         }
     }
 
+
     public void OnValidate()
     {
         if (!settings)
@@ -341,33 +454,8 @@ public class GameInput : MonoBehaviour
             {
                 inputs = settings.m_Inputs;
             }
-
-            //Set Button Names
-            for (int i = 0; i < settings.m_Inputs.Buttons.Length; i++)
-            {
-                if (string.IsNullOrEmpty(settings.m_Inputs.Buttons[i].Name))
-                {
-                    settings.m_Inputs.Buttons[i].m_name = settings.m_Inputs.Buttons[i].keys[0].keyCode.ToString();
-                }
-                else
-                {
-                    settings.m_Inputs.Buttons[i].m_name = settings.m_Inputs.Buttons[i].Name;
-                }
-            }
-
-            //Set Axis Names
-            for (int i = 0; i < settings.m_Inputs.Axis.Length; i++)
-            {
-                if (string.IsNullOrEmpty(settings.m_Inputs.Axis[i].Name))
-                {
-                    settings.m_Inputs.Axis[i].m_name = settings.m_Inputs.Axis[i].type.ToString();
-                }
-                else
-                {
-                    settings.m_Inputs.Axis[i].m_name = settings.m_Inputs.Axis[i].Name;
-                }
-            }
+            SetButtonNames();
+            SetAxisNames();
         }
     }
 }
-//}

@@ -17,6 +17,88 @@ MonoBehaviour:
     - Name: Run
       keys:
       - keyCode: 304
+    - Name: Walk
+      keys:
+      - keyCode: 308
+    - Name: Jump
+      keys:
+      - keyCode: 32
+    - Name: Aim
+      keys:
+      - keyCode: 324
+    - Name: Interact
+      keys:
+      - keyCode: 101
+    - Name: Pickup
+      keys:
+      - keyCode: 101
+    - Name: Back
+      keys:
+      - keyCode: 27
+      - keyCode: 8
+    - Name: UseItem
+      keys:
+      - keyCode: 323
+    - Name: Inventory
+      keys:
+      - keyCode: 105
+    - Name: CharacterScreen
+      keys:
+      - keyCode: 99
+    - Name: InventoryDropItem
+      keys:
+      - keyCode: 113
+    - Name: InventorySlot1
+      keys:
+      - keyCode: 49
+    - Name: InventorySlot2
+      keys:
+      - keyCode: 50
+    - Name: InventorySlot3
+      keys:
+      - keyCode: 51
+    - Name: InventorySlot4
+      keys:
+      - keyCode: 52
+    - Name: InventorySlot5
+      keys:
+      - keyCode: 53
+    - Name: InventorySlot6
+      keys:
+      - keyCode: 54
+    - Name: InventorySlot7
+      keys:
+      - keyCode: 55
+    - Name: InventorySlot8
+      keys:
+      - keyCode: 56
+    - Name: InventorySlot9
+      keys:
+      - keyCode: 57
+    - Name: Lights
+      keys:
+      - keyCode: 108
+    - Name: TurnR
+      keys:
+      - keyCode: 46
+    - Name: TurnL
+      keys:
+      - keyCode: 44
+    - Name: Shot
+      keys:
+      - keyCode: 323
+    - Name: Aim
+      keys:
+      - keyCode: 324
+    - Name: Interact2
+      keys:
+      - keyCode: 102
+    - Name: Put
+      keys:
+      - keyCode: 323
+    - Name: Undock
+      keys:
+      - keyCode: 324
     Axis:
     - Name: Move
       type: 2
@@ -32,3 +114,13 @@ MonoBehaviour:
       Keys_Right:
       - keyCode: 275
       - keyCode: 100
+    - Name: InventoryScroll
+      type: 1
+      Keys_Up:
+      - keyCode: 0
+      Keys_Down:
+      - keyCode: 0
+      Keys_Left:
+      - keyCode: 0
+      Keys_Right:
+      - keyCode: 0
