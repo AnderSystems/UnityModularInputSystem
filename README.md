@@ -25,18 +25,17 @@ After installing the package, you can use the custom input system in your projec
 
 ```csharp
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Example : MonoBehaviour
 {
     void Update()
     {
-        if (InputSystem.GetButtonDown("Jump"))
+        if (GameInput.GetButtonDown("Jump"))
         {
             Debug.Log("Jump button pressed");
         }
 
-        Vector2 move = InputSystem.GetAxis("Move");
+        Vector2 move = GameInput.GetAxis("Move");
         Debug.Log("Move axis: " + move);
     }
 }
